@@ -66,7 +66,7 @@ function setup() {
    new Person(2, 1)
    new Person(3, 2)
    new Person(4, 3)
-  
+
    frameRate(15)
 
 }
