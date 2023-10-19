@@ -1,4 +1,6 @@
-class GrassEater extends LivingCreature {
+const LivingCreature =require('./livingCreature')
+
+module.exports = class GrassEater extends LivingCreature {
     constructor(x, y) {
         super()
         this.x = x

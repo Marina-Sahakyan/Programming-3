@@ -1,78 +1,30 @@
-var matrix = []
+let side = 10;
+const sideX = 10;
+const sideY = 10;
 
-grassArr = []
-grassEaterArr = []
-gishatichArr = []
-personArr = []
+const socket = io();
 
-let side = 10
-function generateMatrix(size, grassCount, grassEaterCount) {
-   for (let y = 0; y < size; y++) {
-      matrix[y] = []
-      for (let x = 0; x < size; x++) {
-         matrix[y].push(0)
-      }
-   }
-
-   for (let i = 0; i < grassCount; i++) {
-      let x = Math.round(Math.random() * (size - 1))
-      let y = Math.round(Math.random() * (size - 1))
-      if (matrix[y][x] == 0) {
-         new Grass(x, y)
-      }
-      else {
-         i--
-      }
-   }
-   for (let i = 0; i < grassEaterCount; i++) {
-      let x = Math.round(Math.random() * (size - 1))
-      let y = Math.round(Math.random() * (size - 1))
-      if (matrix[y][x] == 0) {
-         new GrassEater(x, y)
-      }
-      else {
-         i--
-
-      }
-   }
-
-
-}
-generateMatrix(50, 10, 4)
-
-let z;
-for (let y = 0; y < 50; y++) {
-   matrix[y] = []
-   for (let x = 0; x < 50; x++) {
-      z = Math.round(Math.random() * 0)
-      matrix[y].push(z);
-
-   }
-}
-console.log(matrix)
+socket.on("update matrix", drawful)
 
 function setup() {
-   createCanvas(matrix.length * side + 1, matrix.length * side + 1)
-   background("gray")
-
-   // createCanvas(501, 501);
-   // background('white');
-   new Grass(1, 0)
-   new Grass(6, 7)
-   new GrassEater(5, 5)
-   new GrassEater(7, 6)
-   new Gishatich(7, 8)
-   new Gishatich(12, 15)
-   new Person(2, 1)
-   new Person(3, 2)
-   new Person(4, 3)
-
-   frameRate(15)
+   createCanvas(matrix[0].length * side, matrix.length * side);
+   background('#acacac');
 
 }
-function draw() {
+   
+   // createCanvas(501, 501);
+   // background('white');
+   // new Grass(1, 0)
+   // new Grass(6, 7)
+   // new GrassEater(5, 5)
+   // new GrassEater(7, 6)
+   // new Gishatich(7, 8)
+   // new Gishatich(12, 15)
+   // new Person(2, 1)
+   // new Person(3, 2)
+   // new Person(4, 3)
 
-
+function drawful(matrix) {
 
    fill('white')
    for (let y = 0; y < matrix.length; y++) {
@@ -97,20 +49,9 @@ function draw() {
 
       }
    }
-
-   for (let i in grassArr) {
-      grassArr[i].mul()
-   }
-   for (let i in grassEaterArr) {
-      grassEaterArr[i].start()
-   }
-   for (let i in gishatichArr) {
-      gishatichArr[i].start()
-   }
-   for (let i in personArr) {
-      personArr[i].start()
-   }
+   
 }
+socket.on('update matrix', playGame)
 
 // function setup(){
 //     createCanvas(500,500);

@@ -1,4 +1,6 @@
-class Person extends LivingCreature {
+const LivingCreature =require('./livingCreature')
+
+module.exports = class Person extends LivingCreature {
     constructor(x, y) {
         super()
         this.x = x
