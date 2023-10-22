@@ -1,13 +1,13 @@
 let side = 10;
-const sideX = 10;
-const sideY = 10;
-
+const sideX = 100;
+const sideY = 100;
+var initialMatrix = []
 const socket = io();
 
-socket.on("update matrix", drawful)
+// socket.on("update matrix", drawful)
 
 function setup() {
-   createCanvas(matrix[0].length * side, matrix.length * side);
+   createCanvas(sideX * side, sideY * side);
    background('#acacac');
 
 }
@@ -24,7 +24,8 @@ function setup() {
    // new Person(3, 2)
    // new Person(4, 3)
 
-function drawful(matrix) {
+function drawful(matrix) { 
+   initialMatrix = matrix
 
    fill('white')
    for (let y = 0; y < matrix.length; y++) {
@@ -51,7 +52,13 @@ function drawful(matrix) {
    }
    
 }
-socket.on('update matrix', playGame)
+socket.on("update matrix", (matrix)=>{
+   drawful(matrix)
+  })
+socket.on("update matrix", (matrix)=>{
+ initialMatrix = matrix
+})
+// socket.on('update matrix', playGame)
 
 // function setup(){
 //     createCanvas(500,500);
