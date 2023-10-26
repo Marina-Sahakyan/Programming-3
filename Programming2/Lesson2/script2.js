@@ -3,6 +3,29 @@ const sideX = 100;
 const sideY = 100;
 var initialMatrix = []
 const socket = io();
+var dzmer = false;
+var caxik= false;
+var xot=false;
+
+var clickCount = 0;
+function snow(){
+   dzmer=! dzmer;
+}
+var button = document.getElementById("winter");
+button.addEventListener("click", snow);
+
+function flowers(){
+   caxik=! caxik;
+}
+var button = document.getElementById("spring");
+button.addEventListener("click", flowers);
+
+function kanach(){
+   xot=!xot;
+}
+var button = document.getElementById("summer");
+button.addEventListener("click", kanach);
+
 
 // socket.on("update matrix", drawful)
 
@@ -33,9 +56,18 @@ function drawful(matrix) {
          if (matrix[y][x] == 0) {
             fill('white')
          }
-         else if (matrix[y][x] == 1) {
-            fill('green')
+         else if (matrix[y][x] == 1 ) {
+            if(xot==true){
+              fill('green') 
+            }
+            else if(dzmer ==true){
+               fill("white")
+            }
+            else if (caxik==true){
+               fill("pink")
+            }
          }
+
          else if (matrix[y][x] == 2) {
             fill('yellow')
          }
