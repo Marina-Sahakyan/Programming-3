@@ -1,37 +1,64 @@
 let side = 10;
-const sideX = 100;
-const sideY = 100;
+const sideX = 50;
+const sideY = 50;
 var initialMatrix = []
 const socket = io();
 var dzmer = false;
 var caxik = false;
 var xot = false;
 var terev = false;
+var luys= false;
+
+var p =document.createElement('p')
+document.body.appendChild(p)
 
 var clickCount = 0;
 function snow() {
-   dzmer = !dzmer;
+   dzmer = true;
+   setTimeout(()=>{
+      dzmer = false
+   }, 100)
+
 }
 var button = document.getElementById("winter");
 button.addEventListener("click", snow);
 
 function flowers() {
-   caxik = !caxik;
+   caxik = true;
+   setTimeout(()=>{
+      caxik = false
+   }, 100)
 }
 var button = document.getElementById("spring");
 button.addEventListener("click", flowers);
 
 function kanach() {
-   xot = !xot;
+   xot = true;
+   setTimeout(()=>{
+      xot = false
+   }, 100)
 }
 var button = document.getElementById("summer");
 button.addEventListener("click", kanach);
 
 function leaves() {
-   terev = !terev;
+   terev = true
+   setTimeout(()=>{
+     terev = false
+   }, 100)
 }
 var button = document.getElementById("autumn");
 button.addEventListener("click", leaves);
+
+function light() {
+   luys = true
+   setTimeout(()=>{
+     luys = false
+   }, 100)
+}
+var button = document.getElementById("lightning");
+button.addEventListener("click", light);
+
 
 // socket.on("update matrix", drawful)
 
@@ -63,18 +90,20 @@ function drawful(matrix) {
             fill('white')
          }
          else if (matrix[y][x] == 1) {
-          if (xot == true) {
+            if (xot == true) {
                fill('green')
+          
             }
-            else if (dzmer == true) {
-               fill("blue")
+            if (dzmer == true) {
+               fill("#BFD8F5")
+         
             }
             else if (caxik == true) {
                fill("pink")
             }
             else if (terev == true) {
                fill("orange")
-            
+            }
          }
 
          else if (matrix[y][x] == 2) {
@@ -84,7 +113,15 @@ function drawful(matrix) {
             fill('red')
          }
          else if (matrix[y][x] == 4) {
-            fill("black")
+            fill("#E4B460")
+         }
+         else if (matrix[y][x] == 5) {
+            if(luys==true){
+               fill("blue")
+            }
+            else if (matrix[y][x] == 6) {
+               fill("black")
+            }
          }
 
          rect(x * 10, y * 10, 10, 10)
@@ -92,7 +129,56 @@ function drawful(matrix) {
       }
    }
 
-}
+
+
+
+var data = {}
+
+function countAllChar() {
+    var allGrassCount = 0;
+    var allGrassEaterCount = 0;
+    var allGishatichCount=0;
+    var allPersonCount=0;
+
+    for (var y = 0; y < initialMatrix.length; y++) {
+        for (var x = 0; x < initialMatrix[y].length; x++) {
+            if (initialMatrix[y][x] == 1) {
+                allGrassCount++;
+                data.allGrass = allGrassCount
+            }
+            if (initialMatrix[y][x] == 2) {
+                allGrassEaterCount++;
+                data.allGrassEater = allGrassEaterCount
+            }
+            if (initialMatrix[y][x] == 3) {
+               allGishatichCount++;
+               data.allGishatich = allGishatichCount
+           }
+           if (initialMatrix[y][x] == 4) {
+            allPersonCount++;
+            data.allPerson = allPersonCount
+        }
+        }
+    }
+
+    return data
+
+   }
+
+socket.emit('Total statistics', countAllChar())
+
+  socket.on('display statistics', (data) => {
+        statistics = data
+
+        var updatedText = '';
+        for (var key in statistics) {
+            updatedText += '\n' + key + ' ' + statistics[key];
+        }
+        p.innerText = updatedText;
+
+
+    })
+   }
 socket.on("update matrix", (matrix) => {
    drawful(matrix)
 })

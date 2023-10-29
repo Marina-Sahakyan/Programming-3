@@ -2,7 +2,8 @@ var express = require("express");
 var app = express();
 var server = require('http').createServer(app);
 var io = require("socket.io")(server);
-let random = require("./random")
+let random = require("./random");
+let fs =require('fs');
 app.use(express.static("."));
 
 app.get("/", function (req, res) {
@@ -19,6 +20,8 @@ var Grass = require('./grass')
 var GrassEater = require('./grassEater')
 var Gishatich = require('./gishatich')
 var Person = require('./person')
+var Kaycak = require('./kaycak')
+var Bomb = require('./bomb')
 
 
 
@@ -30,6 +33,8 @@ grassArr = []
 grassEaterArr = []
 gishatichArr = []
 personArr = []
+kaycakArr = []
+bombArr = []
 matrix = []
 
 
@@ -52,10 +57,12 @@ function createMatrix() {
    }
 
 
-   character(1, 100);
+   character(1, 50);
    character(2, 50);
-   character(3, 1);
-   character(4, 1);
+   character(3, 50);
+   character(4, 20);
+   character(5, 50)
+   character(6, 4)
 
    for (var y = 0; y < matrix.length; ++y) {
       for (var x = 0; x < matrix[y].length; ++x) {
@@ -77,12 +84,28 @@ function createMatrix() {
             var per = new Person(x, y, 4);
             personArr.push(per);
          }
-
+         else if (matrix[y][x] == 5) {
+            var kayc = new Kaycak(x, y, 5);
+            personArr.push(kayc)
+         }
+        else if(matrix[y][x]== 6){
+           var b= new Bomb(x ,y, 6);
+           bombArr.push(b)
+        }
       }
    }
 }
 
 createMatrix()
+
+io.on('connection', (socket) => {
+   socket.emit('draw matrix', matrix)
+   socket.on('Total statistics', (data) => {
+     fs.writeFileSync('data.json', JSON.stringify(data))
+     socket.emit('display statistics', data)
+   })
+ 
+ })
 
 // function createGame() {
 //    for (var y = 0; y < matrix.length; ++y) {
@@ -121,18 +144,24 @@ function playGame() {
    for (let i in personArr) {
       personArr[i].start()
    }
+   for (let i in kaycakArr) {
+      kaycakArr[i].start()
+   }
+   for(let i in bombArr){
+      bombArr[i].start()
+   }
    io.emit('update matrix', matrix)
 }
 
 
 
-  
-   setInterval(() => {
-      playGame()
-   }, 200);
+
+setInterval(() => {
+   playGame()
+}, 200);
 
 io.on("connection", function (socket) {
    socket.emit('update matrix', matrix)
-  
- 
+
+
 })
